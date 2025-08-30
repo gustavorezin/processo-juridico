@@ -4,6 +4,7 @@ import com.gustavo.processo_juridico.dtos.LoteIdsRequest;
 import com.gustavo.processo_juridico.dtos.processo.CriarProcessoRequest;
 import com.gustavo.processo_juridico.dtos.processo.ProcessoResponse;
 import com.gustavo.processo_juridico.dtos.processo.RegistrarAcoesRequest;
+import com.gustavo.processo_juridico.dtos.processo.AdicionarPartesRequest;
 import com.gustavo.processo_juridico.usecases.processo.*;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -20,19 +21,22 @@ public class ProcessoController {
     private final ArquivarProcessosUseCase arquivarProcessosUseCase;
     private final AtivarProcessosUseCase ativarProcessosUseCase;
     private final RegistrarAcoesNoProcessoUseCase registrarAcoesNoProcessoUseCase;
+    private final AdicionarPartesNoProcessoUseCase adicionarPartesNoProcessoUseCase;
 
     public ProcessoController(
             CriarProcessoUseCase criarProcessoUseCase,
             SuspenderProcessosUseCase suspenderProcessosUseCase,
             ArquivarProcessosUseCase arquivarProcessosUseCase,
             AtivarProcessosUseCase ativarProcessosUseCase,
-            RegistrarAcoesNoProcessoUseCase registrarAcoesNoProcessoUseCase
+            RegistrarAcoesNoProcessoUseCase registrarAcoesNoProcessoUseCase,
+            AdicionarPartesNoProcessoUseCase adicionarPartesNoProcessoUseCase
     ) {
         this.criarProcessoUseCase = criarProcessoUseCase;
         this.suspenderProcessosUseCase = suspenderProcessosUseCase;
         this.arquivarProcessosUseCase = arquivarProcessosUseCase;
         this.ativarProcessosUseCase = ativarProcessosUseCase;
         this.registrarAcoesNoProcessoUseCase = registrarAcoesNoProcessoUseCase;
+        this.adicionarPartesNoProcessoUseCase = adicionarPartesNoProcessoUseCase;
     }
 
     @PostMapping
@@ -62,6 +66,12 @@ public class ProcessoController {
     @PostMapping("/{id}/acoes")
     public ResponseEntity<?> registrarAcoes(@PathVariable UUID id, @RequestBody RegistrarAcoesRequest acoesRequest) {
         registrarAcoesNoProcessoUseCase.execute(id, acoesRequest);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/partes")
+    public ResponseEntity<?> adicionarPartes(@PathVariable UUID id, @RequestBody AdicionarPartesRequest partesRequest) {
+        adicionarPartesNoProcessoUseCase.execute(id, partesRequest);
         return ResponseEntity.ok().build();
     }
 }
