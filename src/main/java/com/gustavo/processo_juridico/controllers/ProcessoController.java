@@ -3,18 +3,14 @@ package com.gustavo.processo_juridico.controllers;
 import com.gustavo.processo_juridico.dtos.LoteIdsRequest;
 import com.gustavo.processo_juridico.dtos.processo.CriarProcessoRequest;
 import com.gustavo.processo_juridico.dtos.processo.ProcessoResponse;
-import com.gustavo.processo_juridico.usecases.processo.ArquivarProcessosUseCase;
-import com.gustavo.processo_juridico.usecases.processo.AtivarProcessosUseCase;
-import com.gustavo.processo_juridico.usecases.processo.CriarProcessoUseCase;
-import com.gustavo.processo_juridico.usecases.processo.SuspenderProcessosUseCase;
+import com.gustavo.processo_juridico.dtos.processo.RegistrarAcoesRequest;
+import com.gustavo.processo_juridico.usecases.processo.*;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/processos")
@@ -23,17 +19,20 @@ public class ProcessoController {
     private final SuspenderProcessosUseCase suspenderProcessosUseCase;
     private final ArquivarProcessosUseCase arquivarProcessosUseCase;
     private final AtivarProcessosUseCase ativarProcessosUseCase;
+    private final RegistrarAcoesNoProcessoUseCase registrarAcoesNoProcessoUseCase;
 
     public ProcessoController(
             CriarProcessoUseCase criarProcessoUseCase,
             SuspenderProcessosUseCase suspenderProcessosUseCase,
             ArquivarProcessosUseCase arquivarProcessosUseCase,
-            AtivarProcessosUseCase ativarProcessosUseCase
+            AtivarProcessosUseCase ativarProcessosUseCase,
+            RegistrarAcoesNoProcessoUseCase registrarAcoesNoProcessoUseCase
     ) {
         this.criarProcessoUseCase = criarProcessoUseCase;
         this.suspenderProcessosUseCase = suspenderProcessosUseCase;
         this.arquivarProcessosUseCase = arquivarProcessosUseCase;
         this.ativarProcessosUseCase = ativarProcessosUseCase;
+        this.registrarAcoesNoProcessoUseCase = registrarAcoesNoProcessoUseCase;
     }
 
     @PostMapping
@@ -57,6 +56,12 @@ public class ProcessoController {
     @PostMapping("/ativar")
     public ResponseEntity<?> ativar(@RequestBody LoteIdsRequest ids) {
         ativarProcessosUseCase.execute(ids);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{id}/acoes")
+    public ResponseEntity<?> registrarAcoes(@PathVariable UUID id, @RequestBody RegistrarAcoesRequest acoesRequest) {
+        registrarAcoesNoProcessoUseCase.execute(id, acoesRequest);
         return ResponseEntity.ok().build();
     }
 }
