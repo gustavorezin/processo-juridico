@@ -1,10 +1,7 @@
 package com.gustavo.processo_juridico.controllers;
 
-import com.gustavo.processo_juridico.dtos.pessoa.CriarPessoaRequest;
-import com.gustavo.processo_juridico.dtos.pessoa.PessoaResponse;
 import com.gustavo.processo_juridico.dtos.processo.CriarProcessoRequest;
 import com.gustavo.processo_juridico.dtos.processo.ProcessoResponse;
-import com.gustavo.processo_juridico.usecases.pessoa.CriarPessoaUseCase;
 import com.gustavo.processo_juridico.usecases.processo.CriarProcessoUseCase;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
