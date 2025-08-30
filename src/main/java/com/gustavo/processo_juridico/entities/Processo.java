@@ -62,6 +62,18 @@ public class Processo {
         this.acoes.add(acao);
     }
 
+    public void suspender() {
+        this.status = StatusProcesso.SUSPENSO;
+    }
+
+    public void arquivar() {
+        this.status = StatusProcesso.ARQUIVADO;
+    }
+
+    public void ativar() {
+        this.status = StatusProcesso.ATIVO;
+    }
+
     public UUID getId() {
         return id;
     }
