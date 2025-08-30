@@ -43,6 +43,25 @@ public class Processo {
         this.status = StatusProcesso.ATIVO;
     }
 
+    public void adicionarParte(ParteProcesso parte) {
+        if (status != StatusProcesso.ATIVO) throw new IllegalStateException("Processo suspenso ou arquivado");
+
+        boolean jaExiste = this.partes.stream().anyMatch(p ->
+                p.getPessoa().getCpfcnpj().equals(parte.getPessoa().getCpfcnpj()) && p.getTipo() == parte.getTipo()
+        );
+
+        if (jaExiste) throw new IllegalArgumentException("Pessoa com este papel já existe");
+
+        parte.setProcesso(this);
+        this.partes.add(parte);
+    }
+
+    public void registrarAcao(AcaoProcesso acao) {
+        if (status != StatusProcesso.ATIVO) throw new IllegalStateException("Processo suspenso ou arquivado");
+        acao.setProcesso(this);
+        this.acoes.add(acao);
+    }
+
     public UUID getId() {
         return id;
     }
