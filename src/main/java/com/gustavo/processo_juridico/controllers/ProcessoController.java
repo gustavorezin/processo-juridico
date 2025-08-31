@@ -37,19 +37,19 @@ public class ProcessoController {
     }
 
     @PostMapping("/suspender")
-    public ResponseEntity<?> suspender(@RequestBody LoteIdsRequest ids) {
+    public ResponseEntity<?> suspender(@Valid @RequestBody LoteIdsRequest ids) {
         suspenderProcessosUseCase.execute(ids);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/arquivar")
-    public ResponseEntity<?> arquivar(@RequestBody LoteIdsRequest ids) {
+    public ResponseEntity<?> arquivar(@Valid @RequestBody LoteIdsRequest ids) {
         arquivarProcessosUseCase.execute(ids);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/ativar")
-    public ResponseEntity<?> ativar(@RequestBody LoteIdsRequest ids) {
+    public ResponseEntity<?> ativar(@Valid @RequestBody LoteIdsRequest ids) {
         ativarProcessosUseCase.execute(ids);
         return ResponseEntity.ok().build();
     }

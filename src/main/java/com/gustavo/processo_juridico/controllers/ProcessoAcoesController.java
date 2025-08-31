@@ -3,6 +3,7 @@ package com.gustavo.processo_juridico.controllers;
 import com.gustavo.processo_juridico.dtos.LoteIdsRequest;
 import com.gustavo.processo_juridico.dtos.processo.RegistrarAcoesRequest;
 import com.gustavo.processo_juridico.usecases.processo.*;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,13 +24,13 @@ public class ProcessoAcoesController {
     }
 
     @PostMapping("/{id}/acoes")
-    public ResponseEntity<?> registrarAcoes(@PathVariable UUID id, @RequestBody RegistrarAcoesRequest acoesRequest) {
+    public ResponseEntity<?> registrarAcoes(@PathVariable UUID id, @Valid @RequestBody RegistrarAcoesRequest acoesRequest) {
         registrarAcoesNoProcessoUseCase.execute(id, acoesRequest);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/{id}/acoes")
-    public ResponseEntity<Void> removerAcoes(@PathVariable UUID id, @RequestBody LoteIdsRequest idsAcoesRequest) {
+    public ResponseEntity<Void> removerAcoes(@PathVariable UUID id, @Valid @RequestBody LoteIdsRequest idsAcoesRequest) {
         removerAcoesNoProcessoUseCase.execute(id, idsAcoesRequest);
         return ResponseEntity.ok().build();
     }
