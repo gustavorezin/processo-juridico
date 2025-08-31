@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: processo-juridico
+    environment:
+      POSTGRES_DB: processodb
+      POSTGRES_USER: processo
+      POSTGRES_PASSWORD: processo
+    ports:
+      - "5432:5432"
+    volumes:
+      - processo_pgdata:/var/lib/postgresql/data
+
+volumes:
+  processo_pgdata:
