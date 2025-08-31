@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gustavo.processo_juridico.dtos.pessoa.CriarPessoaRequest;
 import com.gustavo.processo_juridico.dtos.pessoa.PessoaResponse;
 import com.gustavo.processo_juridico.usecases.pessoa.CriarPessoaUseCase;
+import com.gustavo.processo_juridico.usecases.pessoa.ListarPessoasUseCase;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -29,6 +30,9 @@ public class PessoaControllerTest {
 
     @MockitoBean
     private CriarPessoaUseCase criarPessoaUseCase;
+
+    @MockitoBean
+    ListarPessoasUseCase listarPessoasUseCase;
 
     @Test
     void deveCriarPessoaRetornar201() throws Exception {
