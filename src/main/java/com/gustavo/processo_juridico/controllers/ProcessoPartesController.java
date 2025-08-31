@@ -29,8 +29,8 @@ public class ProcessoPartesController {
     }
 
     @DeleteMapping("/{id}/partes")
-    public ResponseEntity<?> removerPartes(@PathVariable UUID id, @RequestBody PartesRequest body) {
-        removerPartesNoProcessoUseCase.execute(id, body);
+    public ResponseEntity<?> removerPartes(@PathVariable UUID id, @RequestBody PartesRequest partesRequest) {
+        removerPartesNoProcessoUseCase.execute(id, partesRequest);
         return ResponseEntity.ok().build();
     }
 

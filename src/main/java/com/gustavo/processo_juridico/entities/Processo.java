@@ -74,6 +74,17 @@ public class Processo {
         this.acoes.add(acao);
     }
 
+    public void removerAcao(UUID acaoId) {
+        if (status != StatusProcesso.ATIVO) throw new IllegalStateException("Processo suspenso ou arquivado");
+
+        AcaoProcesso acao = this.acoes.stream()
+                .filter(a -> a.getId().equals(acaoId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Ação não encontrada"));
+
+        this.acoes.remove(acao);
+    }
+
     public void suspender() {
         this.status = StatusProcesso.SUSPENSO;
     }

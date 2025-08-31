@@ -74,4 +74,19 @@ public class ProcessoTest {
                 .hasMessage("Parte não encontrada");
     }
 
+    @Test
+    void deveLancarErroAoRemoverAcoesComProcessoInativo() {
+        processo.suspender();
+        assertThatThrownBy(() -> processo.removerAcao(UUID.randomUUID()))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("Processo suspenso ou arquivado");
+    }
+
+    @Test
+    void deveLancarErroAoRemoverAcoesNaoEncontradas() {
+        assertThatThrownBy(() -> processo.removerAcao(UUID.randomUUID()))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Ação não encontrada");
+    }
+
 }
