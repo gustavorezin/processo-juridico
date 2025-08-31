@@ -1,7 +1,8 @@
 package com.gustavo.processo_juridico.controllers;
 
-import com.gustavo.processo_juridico.dtos.processo.AdicionarPartesRequest;
+import com.gustavo.processo_juridico.dtos.processo.PartesRequest;
 import com.gustavo.processo_juridico.usecases.processo.*;
+import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,14 +12,26 @@ import java.util.UUID;
 @RequestMapping("/api/v1/processos")
 public class ProcessoPartesController {
     private final AdicionarPartesNoProcessoUseCase adicionarPartesNoProcessoUseCase;
+    private final RemoverPartesNoProcessoUseCase removerPartesNoProcessoUseCase;
 
-    public ProcessoPartesController(AdicionarPartesNoProcessoUseCase adicionarPartesNoProcessoUseCase) {
+    public ProcessoPartesController(
+            AdicionarPartesNoProcessoUseCase adicionarPartesNoProcessoUseCase,
+            RemoverPartesNoProcessoUseCase removerPartesNoProcessoUseCase
+    ) {
         this.adicionarPartesNoProcessoUseCase = adicionarPartesNoProcessoUseCase;
+        this.removerPartesNoProcessoUseCase = removerPartesNoProcessoUseCase;
     }
 
     @PostMapping("/{id}/partes")
-    public ResponseEntity<?> adicionarPartes(@PathVariable UUID id, @RequestBody AdicionarPartesRequest partesRequest) {
+    public ResponseEntity<?> adicionarPartes(@PathVariable UUID id, @RequestBody PartesRequest partesRequest) {
         adicionarPartesNoProcessoUseCase.execute(id, partesRequest);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{id}/partes")
+    public ResponseEntity<?> removerPartes(@PathVariable UUID id, @RequestBody PartesRequest body) {
+        removerPartesNoProcessoUseCase.execute(id, body);
+        return ResponseEntity.ok().build();
+    }
+
 }

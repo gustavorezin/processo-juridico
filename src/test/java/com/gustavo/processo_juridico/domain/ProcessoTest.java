@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -56,6 +57,21 @@ public class ProcessoTest {
 
         assertThat(processo.getAcoes()).hasSize(1);
         assertThat(acao.getProcesso()).isSameAs(processo);
+    }
+
+    @Test
+    void deveLancarErroAoRemoverPartesComProcessoInativo() {
+        processo.suspender();
+        assertThatThrownBy(() -> processo.removerParte(UUID.randomUUID(), TipoParte.AUTOR))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessage("Processo suspenso ou arquivado");
+    }
+
+    @Test
+    void deveLancarErroAoRemoverPartesComPessoaNaoEncontrada() {
+        assertThatThrownBy(() -> processo.removerParte(UUID.randomUUID(), TipoParte.AUTOR))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("Parte não encontrada");
     }
 
 }

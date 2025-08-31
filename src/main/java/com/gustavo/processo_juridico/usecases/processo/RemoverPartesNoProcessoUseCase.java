@@ -1,10 +1,7 @@
 package com.gustavo.processo_juridico.usecases.processo;
 
 import com.gustavo.processo_juridico.dtos.processo.PartesRequest;
-import com.gustavo.processo_juridico.entities.ParteProcesso;
-import com.gustavo.processo_juridico.entities.Pessoa;
 import com.gustavo.processo_juridico.entities.Processo;
-import com.gustavo.processo_juridico.repositories.PessoaRepository;
 import com.gustavo.processo_juridico.repositories.ProcessoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;
@@ -12,13 +9,11 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class AdicionarPartesNoProcessoUseCase {
+public class RemoverPartesNoProcessoUseCase {
     private final ProcessoRepository processoRepository;
-    private final PessoaRepository pessoaRepository;
 
-    public AdicionarPartesNoProcessoUseCase(ProcessoRepository processoRepository, PessoaRepository pessoaRepository) {
+    public RemoverPartesNoProcessoUseCase(ProcessoRepository processoRepository) {
         this.processoRepository = processoRepository;
-        this.pessoaRepository = pessoaRepository;
     }
 
     @Transactional
@@ -27,12 +22,9 @@ public class AdicionarPartesNoProcessoUseCase {
                 new IllegalArgumentException("Processo não encontrado")
         );
 
-        partesRequest.partes().forEach(p -> {
-            Pessoa pessoa = pessoaRepository.findById(p.pessoaId()).orElseThrow(
-                    () -> new IllegalArgumentException("Pessoa não encontrada: " + p.pessoaId())
-            );
-            processo.adicionarParte(new ParteProcesso(pessoa, p.tipo()));
-        });
+        partesRequest.partes().forEach(p ->
+                processo.removerParte(p.pessoaId(), p.tipo())
+        );
 
         processoRepository.save(processo);
     }

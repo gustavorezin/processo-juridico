@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
@@ -26,58 +27,35 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.never;
 
 @ExtendWith(MockitoExtension.class)
-public class AdicionarPartesNoProcessoUseCaseTest {
+public class RemoverPartesNoProcessoUseCaseTest {
 
     @Mock
     ProcessoRepository processoRepository;
 
-    @Mock
-    PessoaRepository pessoaRepository;
-
     @InjectMocks
-    AdicionarPartesNoProcessoUseCase adicionarPartesNoProcessoUseCase;
+    RemoverPartesNoProcessoUseCase removerPartesNoProcessoUseCase;
 
     @Test
-    @DisplayName("Deve adicionar partes e salvar processo")
-    void deveAdicionarPartes() {
+    @DisplayName("Deve remover partes e salvar processo")
+    void deveRemoverPartes() {
         UUID processoId = UUID.randomUUID();
         UUID pessoaId1 = UUID.randomUUID();
         UUID pessoaId2 = UUID.randomUUID();
-        Processo processo = new Processo("0001", "Processo");
 
+        Processo processo = Mockito.spy(new Processo("0001", "Processo"));
         given(processoRepository.findById(processoId)).willReturn(Optional.of(processo));
-        given(pessoaRepository.findById(pessoaId1)).willReturn(Optional.of(new Pessoa("A", "111", "a@a.com", "999")));
-        given(pessoaRepository.findById(pessoaId2)).willReturn(Optional.of(new Pessoa("B", "222", "a@a.com", "999")));
-        given(processoRepository.save(processo)).willAnswer(inv -> inv.getArgument(0));
+
+        Mockito.doNothing().when(processo).removerParte(pessoaId1, TipoParte.AUTOR);
+        Mockito.doNothing().when(processo).removerParte(pessoaId2, TipoParte.REU);
 
         PartesRequest partesRequest = new PartesRequest(List.of(
                 new PartesRequest.Parte(pessoaId1, TipoParte.AUTOR),
                 new PartesRequest.Parte(pessoaId2, TipoParte.REU)
         ));
 
-        adicionarPartesNoProcessoUseCase.execute(processoId, partesRequest);
-
-        assertThat(processo.getPartes()).hasSize(2);
+        removerPartesNoProcessoUseCase.execute(processoId, partesRequest);
+        then(processo).should().removerParte(pessoaId1, TipoParte.AUTOR);
+        then(processo).should().removerParte(pessoaId2, TipoParte.REU);
         then(processoRepository).should().save(processo);
-    }
-
-    @Test
-    @DisplayName("Deve lançar erro quando pessoa não existe")
-    void deveLancarErroSePessoaInexistente() {
-        UUID processoId = UUID.randomUUID();
-        UUID pessoaId = UUID.randomUUID();
-        Processo processo = new Processo("0001", "Processo");
-        given(processoRepository.findById(processoId)).willReturn(Optional.of(processo));
-        given(pessoaRepository.findById(pessoaId)).willReturn(Optional.empty());
-
-        PartesRequest partesRequest = new PartesRequest(List.of(
-                new PartesRequest.Parte(pessoaId, TipoParte.AUTOR)
-        ));
-
-        assertThatThrownBy(() -> adicionarPartesNoProcessoUseCase.execute(processoId, partesRequest))
-                .isInstanceOf(IllegalArgumentException.class);
-
-        then(processoRepository).should(never()).save(any());
-        assertThat(processo.getPartes()).isEmpty();
     }
 }

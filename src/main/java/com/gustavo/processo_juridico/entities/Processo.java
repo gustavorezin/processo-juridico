@@ -1,6 +1,7 @@
 package com.gustavo.processo_juridico.entities;
 
 import com.gustavo.processo_juridico.entities.enums.StatusProcesso;
+import com.gustavo.processo_juridico.entities.enums.TipoParte;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -54,6 +55,17 @@ public class Processo {
 
         parte.setProcesso(this);
         this.partes.add(parte);
+    }
+
+    public void removerParte(UUID pessoaId, TipoParte tipo) {
+        if (status != StatusProcesso.ATIVO) throw new IllegalStateException("Processo suspenso ou arquivado");
+
+        ParteProcesso parte = this.partes.stream()
+                .filter(p -> p.getPessoa().getId().equals(pessoaId) && p.getTipo() == tipo)
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Parte não encontrada"));
+
+        this.partes.remove(parte);
     }
 
     public void registrarAcao(AcaoProcesso acao) {
