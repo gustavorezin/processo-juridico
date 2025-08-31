@@ -1,0 +1,5 @@
+target
+.git
+.idea
+.mvn
+**/.DS_Store
