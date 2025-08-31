@@ -2,13 +2,15 @@ package com.gustavo.processo_juridico.controllers;
 
 import com.gustavo.processo_juridico.dtos.processo.PartesRequest;
 import com.gustavo.processo_juridico.usecases.processo.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.aspectj.weaver.patterns.ThisOrTargetAnnotationPointcut;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@Tag(name = "Processos - Partes", description = "Criação e remoção de partes")
 @RestController
 @RequestMapping("/api/v1/processos")
 public class ProcessoPartesController {
@@ -23,12 +25,14 @@ public class ProcessoPartesController {
         this.removerPartesNoProcessoUseCase = removerPartesNoProcessoUseCase;
     }
 
+    @Operation(summary = "Adiciona partes de um processo")
     @PostMapping("/{id}/partes")
     public ResponseEntity<?> adicionarPartes(@PathVariable UUID id, @Valid @RequestBody PartesRequest partesRequest) {
         adicionarPartesNoProcessoUseCase.execute(id, partesRequest);
         return ResponseEntity.ok().build();
     }
 
+    @Operation(summary = "Remove partes de um processo")
     @DeleteMapping("/{id}/partes")
     public ResponseEntity<?> removerPartes(@PathVariable UUID id, @Valid @RequestBody PartesRequest partesRequest) {
         removerPartesNoProcessoUseCase.execute(id, partesRequest);
