@@ -37,10 +37,10 @@ public class PessoaControllerTest {
     @Test
     void deveCriarPessoaRetornar201() throws Exception {
         UUID id = UUID.randomUUID();
-        PessoaResponse pessoaResponse = new PessoaResponse(id, "Teste", "111", "a@a.com", "999");
+        PessoaResponse pessoaResponse = new PessoaResponse(id, "Teste", "11111111111", "a@a.com", "9999999999");
         when(criarPessoaUseCase.execute(any(CriarPessoaRequest.class))).thenReturn(pessoaResponse);
 
-        CriarPessoaRequest pessoaRequest = new CriarPessoaRequest("Teste", "111", "a@a.com", "999");
+        CriarPessoaRequest pessoaRequest = new CriarPessoaRequest("Teste", "11111111111", "a@a.com", "9999999999");
 
         mockMvc.perform(post("/api/v1/pessoas")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -49,7 +49,7 @@ public class PessoaControllerTest {
                 .andExpect(header().string("Location", "/api/v1/pessoas/" + id))
                 .andExpect(jsonPath("$.id").value(id.toString()))
                 .andExpect(jsonPath("$.nome").value("Teste"))
-                .andExpect(jsonPath("$.cpfcnpj").value("111"));
+                .andExpect(jsonPath("$.cpfcnpj").value("11111111111"));
     }
 
     @Test
