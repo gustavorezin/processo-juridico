@@ -33,16 +33,16 @@ public class ProcessoAcoesController {
 
     @Operation(summary = "Registar ações de um processo")
     @PostMapping("/{id}/acoes")
-    public ResponseEntity<?> registrarAcoes(@PathVariable UUID id, @Valid @RequestBody RegistrarAcoesRequest acoesRequest) {
+    public ResponseEntity<Void> registrarAcoes(@PathVariable UUID id, @Valid @RequestBody RegistrarAcoesRequest acoesRequest) {
         registrarAcoesNoProcessoUseCase.execute(id, acoesRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Remover ações de um processo")
     @DeleteMapping("/{id}/acoes")
     public ResponseEntity<Void> removerAcoes(@PathVariable UUID id, @Valid @RequestBody LoteIdsRequest idsAcoesRequest) {
         removerAcoesNoProcessoUseCase.execute(id, idsAcoesRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Lista ações do processo")

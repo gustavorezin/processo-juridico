@@ -5,7 +5,6 @@ import com.gustavo.processo_juridico.dtos.processo.*;
 import com.gustavo.processo_juridico.usecases.processo.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,8 +27,7 @@ public class ProcessoController {
             CriarProcessoUseCase criarProcessoUseCase,
             SuspenderProcessosUseCase suspenderProcessosUseCase,
             ArquivarProcessosUseCase arquivarProcessosUseCase,
-            AtivarProcessosUseCase ativarProcessosUseCase,
-            AdicionarPartesNoProcessoUseCase adicionarPartesNoProcessoUseCase
+            AtivarProcessosUseCase ativarProcessosUseCase
     ) {
         this.criarProcessoUseCase = criarProcessoUseCase;
         this.suspenderProcessosUseCase = suspenderProcessosUseCase;
@@ -51,22 +49,22 @@ public class ProcessoController {
 
     @Operation(summary = "Suspende processos em lote")
     @PostMapping("/suspender")
-    public ResponseEntity<?> suspender(@Valid @RequestBody LoteIdsRequest ids) {
+    public ResponseEntity<Void> suspender(@Valid @RequestBody LoteIdsRequest ids) {
         suspenderProcessosUseCase.execute(ids);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Arquiva processos em lote")
     @PostMapping("/arquivar")
-    public ResponseEntity<?> arquivar(@Valid @RequestBody LoteIdsRequest ids) {
+    public ResponseEntity<Void> arquivar(@Valid @RequestBody LoteIdsRequest ids) {
         arquivarProcessosUseCase.execute(ids);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Ativa processos em lote")
     @PostMapping("/ativar")
-    public ResponseEntity<?> ativar(@Valid @RequestBody LoteIdsRequest ids) {
+    public ResponseEntity<Void> ativar(@Valid @RequestBody LoteIdsRequest ids) {
         ativarProcessosUseCase.execute(ids);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

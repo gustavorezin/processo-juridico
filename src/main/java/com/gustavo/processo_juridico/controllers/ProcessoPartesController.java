@@ -32,16 +32,16 @@ public class ProcessoPartesController {
 
     @Operation(summary = "Adiciona partes de um processo")
     @PostMapping("/{id}/partes")
-    public ResponseEntity<?> adicionarPartes(@PathVariable UUID id, @Valid @RequestBody PartesRequest partesRequest) {
+    public ResponseEntity<Void> adicionarPartes(@PathVariable UUID id, @Valid @RequestBody PartesRequest partesRequest) {
         adicionarPartesNoProcessoUseCase.execute(id, partesRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Remove partes de um processo")
     @DeleteMapping("/{id}/partes")
-    public ResponseEntity<?> removerPartes(@PathVariable UUID id, @Valid @RequestBody PartesRequest partesRequest) {
+    public ResponseEntity<Void> removerPartes(@PathVariable UUID id, @Valid @RequestBody PartesRequest partesRequest) {
         removerPartesNoProcessoUseCase.execute(id, partesRequest);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Lista partes do processo")
