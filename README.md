@@ -11,3 +11,20 @@ Projeto de API para gestão de processos, partes e ações.
 ## Diagrama de classes
 
 ![Diagrama de classes](./docs/diagrama.png)
+
+## Como rodar localmente
+
+### Pré-requisitos
+- **Java 21**
+- **Maven 3.9+**
+- **Docker** (para subir o Postgres)
+
+1. Confira as informações do `docker-compose.yml` e ajuste caso necessário.
+2. Crie um arquivo `.env` na raiz do projeto a partir do `.env.example` e preencha os dados.
+3. Suba o banco de dados:
+```bash
+docker compose up -d
+```
+4. Rode a aplicação.
+
+- Após rodar, a API estará disponível em http://localhost:${PORT}/ e a documentação em http://localhost:${PORT}/docs
